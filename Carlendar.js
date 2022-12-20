@@ -14,19 +14,6 @@ const months=["January", "February", "March", "April", "May", "June", "July", "A
 //data weeks
 const week=["Chủ nhật"," Thứ hai", "Thứ ba", " Thứ tư", " Thứ năm ", " Thứ 6 ", " Thứ bảy "];
 
-const handleClickDay = (evt) =>{
-    evt.forEach(item =>{
-        item.addEventListener('click', ()=>{
-            evt.forEach(item =>{
-                item.classList.remove("active")
-                this.classList.add("active")
-            })
-            currentDay= item.innerHTML
-            currentWeeks = new Date(`${currentMonth +1} ${currentDay},${currentYear}`).getDay()
-            renderCalendar();
-        })
-    })
-}
 //render calendar
 const renderCalendar=(month,year)=>{
 
@@ -53,6 +40,15 @@ const renderCalendar=(month,year)=>{
     tbodyTable.innerHTML=days
 }
 renderCalendar();
+const handleSelectOption =(opDay, optMonth,textYear)=>{
+    let item ="";
+    for(let i=1;i< opDay;i++){
+        item +=` <option value="${i}" ${i===textYear ? 'selected':''}> ${i}</option>`
+    }
+    document.querySelector(optMonth).innerHTML=item
+}
+handleSelectOption(12,".selectMonth",currentMonth+1)
+handleSelectOption(new Date(currentYear,currentMonth+1,0).getDate(),".selectDate",currentDay)
 //handle prev && next 
 prev.forEach(item =>{
     item.addEventListener("click",()=>{
@@ -73,16 +69,9 @@ prev.forEach(item =>{
        renderCalendar();
     })
 })
-const handleSelectOption =(opDay, optMonth,textYear)=>{
-    let item ="";
-    for(let i=1;i< opDay;i++){
-        item +=` <option value="${i}" ${i===textYear ? 'selected' : ''}> ${i}</option>`
-    }
-    document.querySelector(optMonth).innerHTML=item
-}
-handleSelectOption(12,".selectMonth",currentMonth+1)
-handleSelectOption(new Date(currentYear,currentMonth+1,0).getDate(),".selectDate",currentDay)
 document.querySelector(".yearNum").setAttribute('value',currentYear)
+
+//lay gia tri value ng dung nhap vao
 document.querySelector('.selectMonth').addEventListener('change',(evt)=>{
     const {value}=evt.target;
     let selectMonth = value;
@@ -97,11 +86,28 @@ document.querySelector('.yearNum').addEventListener('blur',(evt)=>{
     let selectDate = new Date(selectYear,selectMonth,0).getDate();
     handleSelectOption(selectDate,".selectDate",currentDay)
 })
+//hanldle button Ok
 const handleButtonClick =()=>{
     currentDay = document.querySelector(".selectDate").value
     currentMonth =document.querySelector(".selectMonth").value -1
     currentYear =document.querySelector(".yearNum").value
     currentWeeks = new Date(`${currentMonth +1} ${currentDay},${currentYear}`).getDay()
     renderCalendar();
+}
+//handle click day calendar
+const handleClickDay = (evt) =>{
+    evt.forEach(item =>{
+        item.addEventListener('click',()=>{
+            evt.forEach(item =>{
+            item.classList.remove("in-active")
+            this.classList.add("in-active")
+            })
+            currentDay= item.innerHTML
+            currentWeeks = new Date(`${currentMonth +1} ${currentDay},${currentYear}`).getDay()
+            currentDays.innerText=`${currentDay}`
+            currentWeek.innerText=`${week[currentWeeks]}`
+            tbodyTable.innerHTML=days
+        })
+    })
 }
 
