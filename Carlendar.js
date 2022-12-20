@@ -1,113 +1,128 @@
-const currentDate= document.querySelector('.Current-date');
-const currentDays= document.querySelector('.Current-days');
-const currentWeek= document.querySelector('.Current-week');
-const threadTable= document.querySelector('.thread');
-const tbodyTable= document.querySelector('.days');
-const prev= document.querySelectorAll('.footer span');
-let date = new Date();
-currentYear = date.getFullYear();
-currentMonth=date.getMonth();
-currentDay =date.getDate();
-currentWeeks=date.getDay();
 //data month
-const months=["January", "February", "March", "April", "May", "June", "July", "August","  September","October", "November", "December"];
+const months = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12"];
+// days of month
+const dayOfMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
 //data weeks
-const week=["Chủ nhật"," Thứ hai", "Thứ ba", " Thứ tư", " Thứ năm ", " Thứ 6 ", " Thứ bảy "];
+const week = ["Chủ nhật", " Thứ hai", "Thứ ba", " Thứ tư", " Thứ năm ", " Thứ Sáu ", " Thứ bảy "];
 
-//render calendar
-const renderCalendar=(month,year)=>{
+var currentDate = document.getElementById('currentDate');
+var currentDay = document.getElementById('currentDay');
+var currentWeek = document.getElementById('currentWeek');
+var tableDays = document.getElementById('days');
+var prev = document.querySelectorAll('.footer span');
 
-    const lastDateOfMonth = new Date(currentYear,currentMonth +1,0).getDate()
-    const lastDateOfLastMonth = new Date(currentYear,currentMonth,0).getDate()
-    const lastDayOfMonth = new Date(currentYear,currentMonth,lastDateOfMonth).getDay()
-    const firstDayOfMonth = new Date(currentYear,currentMonth,1).getDay();
+//id weeknow_datenow_monthnow_yearmonth 
+var dayNow = new Date();
+var dateNow = dayNow.getDate();
+var weekNow = dayNow.getDay();
+var monthNow = dayNow.getMonth();
+var yearNow = dayNow.getFullYear();
 
-    let days ="";
-    for(let i=firstDayOfMonth; i>0; i--){
-        days +=`<li></li>`
-    }
-    for(let i=lastDayOfMonth; i<lastDayOfMonth; i++){
-        days +=`<li>${lastDateOfLastMonth}</li>`
-    }
-    for(let i=1; i<=lastDateOfMonth; i++){
-        let isDayNow = i === date.getDate() && currentMonth === new Date().getMonth()
-        && currentYear == new Date().getFullYear() ? "in-active":"";
-        days +=`<li class="${isDayNow}">${i}</li>`
-    }
-    currentDate.innerText =` Tháng ${months[currentMonth]} năm ${currentYear}`
-    currentDays.innerText=`${currentDay}`
-    currentWeek.innerText=`${week[currentWeeks]}`
-    tbodyTable.innerHTML=days
+const renderCalendarDetail = () => {
+    currentDate.innerText = `Tháng ${months[monthNow]} năm ${yearNow}`;
+    currentDay.innerText = `${dateNow}`;
+    currentWeek.innerText = `${week[weekNow]}`;
 }
-renderCalendar();
+const renderCalendar = () => {
+    const firstDayOfMonth = new Date(yearNow, monthNow, 1).getDay();
+    var tmp = ' ';
+    var cnt = 1; //count day
+     // kiểm tra đã qua ngày đầu tiên của tháng chưa
+    var checkBeginDayOfMonth = false;
+    var numberDayOfMonth = dayOfMonth[monthNow];
+    if (monthNow === 1) {
+        if (yearNow % 4 === 0 || (yearNow % 400 === 0 && yearNow % 100 !== 0)) {
+            numberDayOfMonth += 1;
+        }
+    }
+    for (var i = 0; i < 6; i++) {
+        tmp += '<tr>';
+        for (var j = 0; j < 7; j++) {
+            if (((i === 0 && firstDayOfMonth === j) || checkBeginDayOfMonth) && cnt <= numberDayOfMonth) {
+                if (cnt == dateNow)
+                    tmp += `<td onClick="chooseDay(${cnt},${monthNow}, ${yearNow})" class = 'active'>${cnt}</td>`;
+                else
+                    tmp += `<td onClick="chooseDay(${cnt},${monthNow}, ${yearNow})">${cnt}</td>`;
+                cnt++;
+                checkBeginDayOfMonth = true;
+            } else
+                tmp += '<td>&nbsp;&nbsp;</td>';
+        }
+        tmp += '</tr>';
+    }
+    console.log(firstDayOfMonth);
+    tableDays.innerHTML = tmp;
+}
+
+const chooseDay = (date, month, year) => {
+    yearNow = year;
+    monthNow = month;
+    dateNow = date
+    weekNow = new Date(`${monthNow + 1} ${dateNow},${yearNow}`).getDay();
+    handelCreateOption();
+    renderCalendarDetail();
+    renderCalendar();
+}
+
+
+prev.forEach(item => {
+    item.addEventListener("click", () => {
+        monthNow = item.id === "prevMonth" ? monthNow - 1 : monthNow;
+        yearNow = item.id === "prevYear" ? yearNow - 1 : yearNow;
+        monthNow = item.id === "nextMonth" ? monthNow + 1 : monthNow;
+        yearNow = item.id === "nextYear" ? yearNow + 1 : yearNow;
+        weekNow = new Date(`${dateNow} ${monthNow} ${yearNow}`).getDay()
+
+        if (monthNow < 0 || monthNow > 11) {         
+            yearNow = date.getFullYear();
+            monthNow = date.getMonth();
+            date = new Date(`${monthNow + 1} ${dateNow},${yearNow}`);
+            weekNow = date.getDay();
+        } else {
+            date = new Date();
+            weekNow = new Date(`${monthNow + 1} ${dateNow},${yearNow}`).getDay();
+        }
+        handelCreateOption();
+        renderCalendarDetail();
+        renderCalendar();
+    })
+})
+
+// onPay => số lần lặp
+// optMonth => id hoặc class bên html
+// textYear => giá trioj hiện tại
 const handleSelectOption =(opDay, optMonth,textYear)=>{
     let item ="";
-    for(let i=1;i< opDay;i++){
+    for(let i=1;i<opDay+1;i++){
         item +=` <option value="${i}" ${i===textYear ? 'selected':''}> ${i}</option>`
     }
     document.querySelector(optMonth).innerHTML=item
 }
-handleSelectOption(12,".selectMonth",currentMonth+1)
-handleSelectOption(new Date(currentYear,currentMonth+1,0).getDate(),".selectDate",currentDay)
-//handle prev && next 
-prev.forEach(item =>{
-    item.addEventListener("click",()=>{
-       currentMonth =item.id === "prevMonth" ? currentMonth - 1 :currentMonth;
-       currentYear =item.id === "prevYear" ? currentYear - 1 :currentYear;
-       currentMonth =item.id === "nextMonth" ? currentMonth + 1 :currentMonth;
-       currentYear =item.id === "nextYear" ? currentYear +1 :currentYear;
-       currentWeeks = new Date(`${currentMonth +1} ${currentDay},${currentYear}`).getDay()
-       //hanlde month not undifined on click
-       if(currentMonth <0 || currentMonth >11){
-        date = new Date(currentYear,currentMonth);
-        currentYear =date.getFullYear();
-        currentMonth=date.getMonth(); 
-       }else{
-        date= new Date();
-       }
-       
-       renderCalendar();
-    })
-})
-document.querySelector(".yearNum").setAttribute('value',currentYear)
-
-//lay gia tri value ng dung nhap vao
-document.querySelector('.selectMonth').addEventListener('change',(evt)=>{
-    const {value}=evt.target;
-    let selectMonth = value;
-    let selectYear = document.querySelector(".yearNum").value;
-    let selectDate = new Date(selectYear,selectMonth,0).getDate();
-    handleSelectOption(selectDate,".selectDate",currentDay)
-})
-document.querySelector('.yearNum').addEventListener('blur',(evt)=>{
-    const {value}=evt.target;
-    let selectYear = value;
-    let selectMonth = document.querySelector(".selectMonth").value;
-    let selectDate = new Date(selectYear,selectMonth,0).getDate();
-    handleSelectOption(selectDate,".selectDate",currentDay)
-})
-//hanldle button Ok
+const handelCreateOption = () => {
+    handleSelectOption(12,".selectMonth", monthNow + 1)
+    handleSelectOption(new Date(yearNow, monthNow + 1,0).getDate(),".selectDate",dateNow);
+    document.querySelector(".yearNum").setAttribute('value',yearNow);
+}
 const handleButtonClick =()=>{
-    currentDay = document.querySelector(".selectDate").value
-    currentMonth =document.querySelector(".selectMonth").value -1
-    currentYear =document.querySelector(".yearNum").value
-    currentWeeks = new Date(`${currentMonth +1} ${currentDay},${currentYear}`).getDay()
+    dateNow = document.querySelector(".selectDate").value * 1;
+    monthNow = document.querySelector(".selectMonth").value * 1 - 1;
+    yearNow = document.querySelector(".yearNum").value * 1;
+    date = new Date(`${monthNow +1} ${dateNow},${yearNow}`);
+    weekNow = date.getDay();
+    renderCalendarDetail();
     renderCalendar();
 }
-//handle click day calendar
-const handleClickDay = (evt) =>{
-    evt.forEach(item =>{
-        item.addEventListener('click',()=>{
-            evt.forEach(item =>{
-            item.classList.remove("in-active")
-            this.classList.add("in-active")
-            })
-            currentDay= item.innerHTML
-            currentWeeks = new Date(`${currentMonth +1} ${currentDay},${currentYear}`).getDay()
-            currentDays.innerText=`${currentDay}`
-            currentWeek.innerText=`${week[currentWeeks]}`
-            tbodyTable.innerHTML=days
-        })
-    })
-}
 
+const returnDateNow = () =>{
+    dayNow = new Date();
+    dateNow = dayNow.getDate();
+    weekNow = dayNow.getDay();
+    monthNow = dayNow.getMonth();
+    yearNow = dayNow.getFullYear();
+    handelCreateOption();
+    renderCalendarDetail();
+    renderCalendar();
+}
+handelCreateOption();
+renderCalendarDetail();
+renderCalendar();

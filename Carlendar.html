@@ -10,36 +10,34 @@
 <body>
     <div class="container">
         <header>
-            <h3 class="Current-date mm"></h3>
+            <h3 class="Current-date mm" id="currentDate"></h3>
         </header>
         <nav>
-            <h1 class="Current-days"></h1>
-            <h3 class="Current-week" style="text-decoration:underline;"></h3>
+            <h1 class="Current-days" id="currentDay"></h1>
+            <h3 class="Current-week"  id="currentWeek" style="text-decoration:underline;"></h3>
         </nav>
         <section>
-            <div border="1px" cellspacing="1" cellpadding="15px" width="50%" align="center" class="calender">
-                <ul class="weeks">
-                    <li>CN</li>
-                    <li>T2</li>
-                    <li>T3</li>
-                    <li>T4</li>
-                    <li>T5</li>
-                    <li>T6</li>
-                    <li>T7</li>
-                </ul>
-                <ul class="days">
-                   
-                    
-                    <li class="in-active">19</li>
-                   
-                
-                </ul>
-            </div>
+            <table  border="1px" cellspacing="2" cellpadding="0" width="100%"  class="calender">
+                <thead class="weeks">
+                    <tr>
+                        <th>CN</th>
+                        <th>T2</th>
+                        <th>T3</th>
+                        <th>T4</th>
+                        <th>T5</th>
+                        <th>T6</th>
+                        <th>T7</th>
+                    </tr>
+                </thead>
+                <tbody class="days" id="days">
+                </tbody>
+            </table>
         </section>
         <footer >
             <div class="footer">
-                <span id="prevYear" class="prevYear"><<</span> &nbsp;
-                <span id="prevMonth" class="prevMonth"><</span> &nbsp;
+                <font color="blue"> <span id="prevYear" class="prevYear">&#60;&#60;</span> &nbsp;
+                    <span id="prevMonth" class="prevMonth">&#60;</span> &nbsp;</font>
+               
             <span>
                 <select name="selectDate" class="selectDate" id="selectDate">
                     
@@ -52,9 +50,12 @@
             </span>/ &nbsp;
             <input type="text" id="yearNum" class="yearNum"/>&nbsp;
             <button onclick="handleButtonClick()">Ok</button>&nbsp;
-            <span id="nextMonth" class="nextMonth">></span>&nbsp;
-            <span id="nextYear" class="nextYear">>></span>&nbsp;&nbsp;
-             @
+            <font color="blue">
+                <span id="nextMonth" class="nextMonth">&#62;</span>&nbsp;
+                <span id="nextYear" class="nextYear">&#62;&#62;</span>
+            </font>
+           &nbsp;&nbsp;
+            <span aclass="nextYear" onclick="returnDateNow()">&#64;</span>
             </div>
         </footer>
         

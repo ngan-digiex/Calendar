@@ -1,53 +1,59 @@
 *{
-    margin: 0;
+    margin: 0 ;
     padding: 0;
     box-sizing: border-box;
-    
 }
 .container{
-    border: 1px solid #000000;
-    width: 80%;
-}
-header  .mm{
-    text-align: center;
-    width: 50%;
-    background: #ccffcc;
-    top: 50%;
-    left: 50%;
-    transform: translate(50%,50%);
-}
-nav{
-    text-align: center;
-    margin: 20px;
-}
-.calender{
-    padding: 20px;  
-}
-.calender .weeks li{
-    font-weight: 800;
-    border: 1px solid #bfb3b3;
-    background: #ffffcc;
-    
-}
-.calender .days{
-    margin-bottom: 20px;
-    border: 1px solid #b9b5b5;
-}
-.calender ul{
-    display: flex;
-    list-style: none;
-    flex-wrap: wrap;
-}
-.calender ul li{
-    width: calc(100%/7);
-    border: 1px solid #d5d1d1;
+    width: 70%;
+    height: auto;
+    margin: 10vh auto ;
+    border: 2px solid black;
     padding: 10px;
+    border-radius: 5px;
 }
-.days .in-active{
-    background: red;
-}
-.footer{
-    /* background: #CCCC99; */
-    margin-top: 10px;
+
+nav h1,h3{
     text-align: center;
+    font-size: 4em;
+}
+nav h3{
+    text-align: center;
+    font-size: 3em;
+}
+header h3{
+    text-align: center;
+    background-color:#ccffcc;
+    font-size: 2em;
+}
+nav {
+    margin: 10px 0;
+}
+table{
+    padding: 5px;
+    margin-bottom: 15px; 
+    border-radius: 5px;
+    text-align: center;
+}
+table thead {
+    background: #FFFFCC;
+}
+table td{
+    background: #FDFDF0;
+    width: calc(100%/7);
+    padding: 10px 0;
+
+}
+table td:nth-child(1){
+    color: red;
+}
+table td:last-child{
+    color:blue;
+}
+footer {
+    text-align: center;
+    background: #CCCC99;
+    padding: 5px 0;
+}
+.active{
+    background-color: #9acd32;
 }
