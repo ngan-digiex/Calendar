@@ -63,8 +63,6 @@ const chooseDay = (date, month, year) => {
     renderCalendarDetail();
     renderCalendar();
 }
-
-
 prev.forEach(item => {
     item.addEventListener("click", () => {
         monthNow = item.id === "prevMonth" ? monthNow - 1 : monthNow;
@@ -82,7 +80,7 @@ prev.forEach(item => {
             date = new Date();
             weekNow = new Date(`${monthNow + 1} ${dateNow},${yearNow}`).getDay();
         }
-        handelCreateOption();
+        // handelCreateOption(); fix bug double render
         renderCalendarDetail();
         renderCalendar();
     })
